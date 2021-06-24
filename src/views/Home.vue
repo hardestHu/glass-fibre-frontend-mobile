@@ -52,27 +52,28 @@
       <div class="custom-area">
         <div class="area-title">已成功授权</div>
         <div class="step-list">
-          <div class="step-item">
-           
-            <div class="step-icon" v-if="isAnimation" >
-                <van-icon name="replay" color="#2F54EB" size="30"/>
-               
+          <span class="step-line" :class="{'custom-opacity':isAnimationStep > 0}" ></span> 
+            <transition name="fade">
+    
+              <div class="step-item" v-if="isAnimationStep >=0">
+                <div class="step-icon" v-if="isAnimationStep === 0">
+                    <van-icon name="replay" class="circle-icon" color="#2F54EB" size="30"/>
+                </div>
+                <div class="step-icon" v-else>
+                    <van-icon name="checked" color="#2F54EB" size="30" />
+                </div>
+                <div class="step-desc">
+                  <span class="desc-title">数据组装</span>
+                  <span class="desc-date">2021-06-21 17:17:17</span>
+                </div>
+              </div>
+            </transition>
+          <div class="step-item" v-if="isAnimationStep >=1">
+            <div class="step-icon" v-if="isAnimationStep === 1">
+                <van-icon name="replay"  class="circle-icon"  color="#2F54EB" size="30"/>
             </div>
             <div class="step-icon" v-else>
-                <van-icon name="checked" color="#2F54EB" size="30" />
-                <span class="step-line"></span>
-            </div>
-            <div class="step-desc">
-              <span class="desc-title">数据组装</span>
-              <span class="desc-date">2021-06-21 17:17:17</span>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-icon" v-if="isAnimation">
-                <van-icon name="replay" color="#2F54EB" size="30"/>
-            </div>
-            <div class="step-icon" v-else>
-                <van-icon name="checked" color="#2F54EB" size="30" />
+                <van-icon name="checked"  color="#2F54EB" size="30" />
             </div>
             <div class="step-desc">
               <span class="desc-title">数据签名</span>
@@ -80,9 +81,9 @@
             </div>
           </div>
 
-          <div class="step-item">
-            <div class="step-icon" v-if="isAnimation">
-                <van-icon name="replay" color="#2F54EB" size="30"/>
+          <div class="step-item" v-if="isAnimationStep >= 2">
+            <div class="step-icon" v-if="isAnimationStep === 2">
+                <van-icon name="replay"  class="circle-icon"  color="#2F54EB" size="30"/>
             </div>
             <div class="step-icon" v-else>
                 <van-icon name="checked" color="#2F54EB" size="30" />
@@ -138,8 +139,9 @@ export default {
 
       showFillDialog:false,
       helpMemoryWord:'',
-      showStepDialog:true,
-      isAnimation:false,
+      showStepDialog:false,
+      isAnimationStep: -1,
+      timeCount:'',
     };
   },
   props: {
@@ -148,22 +150,6 @@ export default {
   mounted() {
   },
   methods:{
-    handleSubmitEvent(){
-      this.showSetp = true
-      setInterval(this.handleStepAdd,1000)
-    },
-    handleStepAdd() {
-      if (this.stepIndex++ > 3)
-        this.$router.push({ path: '/memocode-ing' })
-        // return;
-    },
-    goto(){
-      this.cancelOrCreate = true
-      // this.$router.push('/')
-    },
-    goCreat(){
-      this.cancelOrSubmit = true
-    },
     openFullScreen() {
       // this.showSetp = true;
       this.showFillDialog = true;
@@ -187,10 +173,23 @@ export default {
     },
     confirmFill(action,done){
       // debugger
-      console.log(action)
       if(action === 'confirm'){
          if(this.helpMemoryWord){
           this.showStepDialog = true
+          this.isAnimationStep = 0;
+          let self = this;
+          
+          this.timeCount = setInterval(() => {
+            if(self.isAnimationStep === 3){
+              self.$router.push({name:'Success'})
+              self.showStepDialog = false;
+              clearInterval(self.timeCount)
+              self.isAnimationStep = -1;
+            }else{
+              self.isAnimationStep++
+            }
+          },3000)
+          
           done()
         }else{
           Toast('请填写助记词')
@@ -204,12 +203,17 @@ export default {
 
       
       
+  },
+  beforeDestroy(){
+    clearInterval(this.timeCount)
   }
+  
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+ 
   .welcome{
     position: absolute;
     top: 25px;
@@ -286,7 +290,7 @@ export default {
   }
   .custom-area{
     width:300px;
-    min-height:200px;
+    min-height:320px;
     border-radius: 5px;
     background-color:#fff;
     text-align: center;
@@ -298,27 +302,39 @@ export default {
     color:#333333;
     margin-bottom:10px;
   }
+  .step-list{
+    position: relative;
+  }
   .step-item{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom:20px;
+    padding-left: 50px;
+    margin-bottom: 20px;
+    position: relative;
   }
   
   .step-icon{
-    margin-right:10px;
-    position: relative;
-    z-index: 1;
+    /* margin-right:10px; */
+    width:30px;
+    height:30px;
+    position: absolute;
+    left:0px;
+    top:50%;
+    transform: translate(0,-50%);
     background-color: #fff;
+    z-index:10;
   }
-  .step-icon .step-line{
+  .step-line{
     width:2px;
-    height:55px;
+    height:120px;
     background-color:#2F54EB;
     position: absolute;
-    left:50%;
-    bottom:-100%;
-    z-index: 0;
+    left:15px;
+    top:40px;
+    z-index: 2;
+    opacity: 0;
+    animation: process-step 6s linear 3s 1;
   }
   .step-icon .icon-complete{
     width:20px;
@@ -345,5 +361,41 @@ export default {
     font-size:14px;
     color:#ddd;
     margin-top:10px;
+  }
+  .circle-icon{
+    animation: turn-around 1s linear 3;
+  }
+  
+  @keyframes turn-around {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes	process-step{
+    0%{
+      height:0px;
+      opacity: 1;
+    }
+    50%{
+      height:70px;
+      opacity: 1;
+    }
+    100%{
+      opacity: 1;
+      height:120px;
+    }
+  }
+  .custom-opacity{
+    opacity: 1;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
   }
 </style>

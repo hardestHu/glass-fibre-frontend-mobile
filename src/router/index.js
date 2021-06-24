@@ -1,8 +1,7 @@
 import VueRouter from 'vue-router'
 
 import Home from '../views/Home'
-import MemoCode from '../components/MemoCode'
-import MemoCodeIng from '../components/MemoCodeIng'
+import Success from '../views/Success'
 
 const routes = [
   {
@@ -15,20 +14,16 @@ const routes = [
     component:Home
   },
   {
-    path:'/memocode',
-    name:'MemoCode',
-    component:MemoCode
+    path:'/success',
+    name:'Success',
+    component:Success
   },
-  {
-    path:'/memocode-ing',
-    name:'MemoCodeIng',
-    component:MemoCodeIng
-  },
+  
   {path:'*',redirect:'/data-empower'}
 ]
 
 const router = new VueRouter({
-  mode:'history',
+  mode:'hash',
   scrollBehavior: () => ({ y: 0 }),
   routes
 })
