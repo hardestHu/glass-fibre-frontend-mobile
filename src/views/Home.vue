@@ -1,7 +1,7 @@
 <template>
   <div class="contain">
-    <div>
-      <img style="width: 100%;height: 200px;" src="../assets/bg.png"/>
+    <div class="top-img">
+      <img src="../assets/bg.png"/>
       <!-- <div class="welcome">欢迎您！张三丰</div> -->
     </div>
     <div class="content" >南京玻璃纤维研究院正在向您申请授权获取"玻璃纤维产品检测数据"需要您授权以下信息</div>
@@ -44,7 +44,7 @@
         <el-step title="数据推送" description="2020.12.12"></el-step>
       </el-steps>
     </el-dialog> -->
-    <van-dialog v-model="showFillDialog" title="请输入您的助记词" show-cancel-button :before-close="confirmFill">
+    <van-dialog class="input-dialog" v-model="showFillDialog" title="请输入您的助记词" show-cancel-button :before-close="confirmFill">
       <div class="custom-tips">请务必记住助记词，否则将无法进行授权</div>
       <van-field class="custom-field" v-model="helpMemoryWord" label="" :border="true" placeholder="请输入助记词"/>
     </van-dialog>
@@ -57,10 +57,10 @@
     
               <div class="step-item" v-if="isAnimationStep >=0">
                 <div class="step-icon" v-if="isAnimationStep === 0">
-                    <van-icon name="replay" class="circle-icon" color="#2F54EB" size="30"/>
+                    <van-icon name="replay" class="circle-icon" color="#2F54EB"/>
                 </div>
                 <div class="step-icon" v-else>
-                    <van-icon name="checked" color="#2F54EB" size="30" />
+                    <van-icon name="checked" color="#2F54EB" />
                 </div>
                 <div class="step-desc">
                   <span class="desc-title">数据组装</span>
@@ -70,10 +70,10 @@
             </transition>
           <div class="step-item" v-if="isAnimationStep >=1">
             <div class="step-icon" v-if="isAnimationStep === 1">
-                <van-icon name="replay"  class="circle-icon"  color="#2F54EB" size="30"/>
+                <van-icon name="replay"  class="circle-icon"  color="#2F54EB" />
             </div>
             <div class="step-icon" v-else>
-                <van-icon name="checked"  color="#2F54EB" size="30" />
+                <van-icon name="checked"  color="#2F54EB"  />
             </div>
             <div class="step-desc">
               <span class="desc-title">数据签名</span>
@@ -83,10 +83,10 @@
 
           <div class="step-item" v-if="isAnimationStep >= 2">
             <div class="step-icon" v-if="isAnimationStep === 2">
-                <van-icon name="replay"  class="circle-icon"  color="#2F54EB" size="30"/>
+                <van-icon name="replay"  class="circle-icon"  color="#2F54EB"/>
             </div>
             <div class="step-icon" v-else>
-                <van-icon name="checked" color="#2F54EB" size="30" />
+                <van-icon name="checked" color="#2F54EB" />
             </div>
             <div class="step-desc">
               <span class="desc-title">数据推送</span>
@@ -224,55 +224,53 @@ export default {
   .contain{
     display: flex;
     flex-flow: nowrap column;
-    margin-top: -50px;
+    min-height: 100vh;
+    width:375px;
+    
   }
   .content{
-    /* text-align: left; */
-    /* padding:8%; */
     padding:10px 20px;
     font-size:16px;
     line-height:30px;
   }
-  .bg{
-    position: absolute;
-    /*background: url('./assets/bg.png') center 100%  no-repeat;*/
-    width: 100%;
-    height: 64%;
-    background-size:100% 100%;
+  .top-img{
+    width:375px;
+    height:200px;
+
+  }
+  .top-img img{
+    width:100%;
+    height:100%;
   }
   .data-frame{
-    width: 100%;
-    height: 210px;
+    width: 375px;
+    min-height: 210px;
   }
   .data-list{
     display: flex;
     flex-flow: row nowrap;
     padding:10px;
+    align-items: center;
+    font-size:16px;
   }
   .data-icon{
-    width: 6%;
-    margin-right: 1%;
+    width: 20px;
+    height: 20px;
+    margin-right:10px;
   }
   .border{
     border:1px solid #f0f9eb;
-    width: 100%;
+    width: 375px;
   }
   .submit{
     margin-top:40px;
     height: 40px;
     text-align: center;
     line-height: 40px;
-    color: white;
+    color: rgb(29, 28, 28);
     background-color: red; /* 浏览器不支持时显示 */
     background-image: linear-gradient(to right,#5C47AE, #5C8DF7);
-  }
-  .sec-text{
-    text-align: center;
-  }
-  .text-contain{
-    width: 70%;
-    margin-left: 32%;
-    margin-top:10px;
+    font-size:20px;
   }
   .custom-tips{
     margin-top:10px;
@@ -324,6 +322,9 @@ export default {
     transform: translate(0,-50%);
     background-color: #fff;
     z-index:10;
+  }
+  .step-icon .van-icon{
+    font-size:30px;
   }
   .step-line{
     width:2px;
